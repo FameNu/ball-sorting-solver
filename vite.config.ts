@@ -13,4 +13,5 @@ export default defineConfig({
       '@utils': fileURLToPath(new URL('./src/utils', import.meta.url)),
     },
   },
+  base: '/ball-sorting-solver/',
 })
