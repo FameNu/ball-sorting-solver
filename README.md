@@ -1,73 +1,112 @@
-# React + TypeScript + Vite
+# Ball Sorting Solver
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Version 1.0 of a dark-theme ball sorting puzzle solver built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- TypeScript 6
+- Vite 8
+- Tailwind CSS 4
+- daisyUI
+- ESLint
 
-## React Compiler
+## What It Does
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This app lets you build a ball sorting puzzle board, edit the tubes, and calculate a valid solution.
 
-## Expanding the ESLint configuration
+The board is rendered in a dark UI and supports:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- custom tube count
+- configurable starting tube capacity
+- manual tube editing
+- gravity-based tube editing
+- preset system colors
+- custom colors
+- solution steps after solving
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## How The Solver Works
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+The solver uses a breadth-first search strategy.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. The app reads the current board from the UI.
+2. Each tube is converted into solver state and capacity data.
+3. The solver checks every valid move between tubes.
+4. It serializes each board state so repeated states are skipped.
+5. It stops when a solved board is found.
+6. The result is returned as a list of moves like `from`, `to`, and `hex`.
+
+The solver treats a board as solved when each tube is either empty or contains balls of one color only and matches its capacity.
+
+## Colors System (Currently in v1.0)
+
+The app loads 12 default system colors, but you can add any custom color using the color picker.
+- Red `#e53935`
+- Dark Red `#8b0000`
+- Light Green `#81c784`
+- Dark Green `#2e7d32`
+- Blue `#1e88e5`
+- Light Blue `#81d4fa`
+- Purple `#8e24aa`
+- Light Purple `#ce93d8`
+- Orange `#ff9800`
+- Pink `#f06292`
+- Beige `#e3c298`
+- White `#ffffff`
+
+## Features In v1.0
+
+- Always uses dark theme
+- Supports 2 to 20 tubes
+- Lets you set the initial tube capacity
+- Can reset or rebuild the board when settings change
+- Can toggle the initial setup mode
+- Can edit tubes manually by clicking cells
+- Can enable or disable gravity-style filling
+- Loads 12 system colors by default:
+  - Red `#e53935`
+  - Dark Red `#8b0000`
+  - Light Green `#81c784`
+  - Dark Green `#2e7d32`
+  - Blue `#1e88e5`
+  - Light Blue `#81d4fa`
+  - Purple `#8e24aa`
+  - Light Purple `#ce93d8`
+  - Orange `#ff9800`
+  - Pink `#f06292`
+  - Beige `#e3c298`
+  - White `#ffffff`
+- Can add a custom color from the color picker
+- Shows color counts above the board
+- Highlights the active color
+- Clears individual tubes
+- Solves the current puzzle and renders each move step-by-step
+- Shows a solved message when the board is already complete
+
+## Getting Started
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `npm run dev` - start the local dev server
+- `npm run build` - type-check and build for production
+- `npm run preview` - preview the production build
+- `npm run lint` - run ESLint
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Project Structure
+
+- `src/App.tsx` - main UI and app state
+- `src/components/Tube.tsx` - tube editor UI
+- `src/components/NumberStepper.tsx` - number input control
+- `src/utils/solver.ts` - breadth-first search solver
+- `src/utils/systemColors.ts` - default color palette
+- `src/types/` - shared TypeScript types
+
+## Notes
+
+- Path aliases are configured for `@types`, `@components`, and `@utils`.
+- The app uses a fixed dark theme on load.
