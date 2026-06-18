@@ -54,7 +54,7 @@ export default function Tube({
 
   return (
     <div className='flex flex-col items-center gap-3 bg-base-200 p-4 rounded-xl w-24 shadow-sm'>
-      <div className='text-xs font-bold text-base-content/60'>
+      <div className='text-xs font-bold text-base-content/60 mb-auto'>
         Tube {index + 1}
       </div>
 
