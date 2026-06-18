@@ -132,11 +132,11 @@ export default function App() {
         <main className='p-4 md:p-8 w-full max-w-5xl'>
           {/* Top Panel: Counters & Palette */}
           <div className='bg-base-200 p-4 rounded-xl mb-6 shadow-sm'>
-            <div className='flex flex-wrap gap-2 mb-4'>
+            <div className='grid grid-cols-4 min-[500px]:grid-cols-6 md:grid-cols-8 xl:grid-cols-12 gap-2 mb-4'>
               {challengeColors.map((hex, i) => (
                 <div
                   key={i}
-                  className='badge badge-lg gap-2 bg-base-300 border-none p-4'
+                  className='badge badge-lg gap-2 bg-base-300 border-none p-4 mx-auto'
                 >
                   <div
                     className='w-4 h-4 rounded-full border border-base-content/20'
@@ -151,7 +151,7 @@ export default function App() {
               <h3 className='text-sm font-bold text-base-content/60 mb-2'>
                 Active Color
               </h3>
-              <div className='flex flex-wrap gap-3'>
+              <div className='max-sm:grid max-sm:grid-cols-6 sm:flex sm:flex-wrap gap-3'>
                 {challengeColors.map((hex, i) => (
                   <button
                     key={i}
