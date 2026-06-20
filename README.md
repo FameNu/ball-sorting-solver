@@ -54,6 +54,10 @@ The app loads 12 default system colors, but you can add any custom color using t
 - Beige `#e3c298`
 - White `#ffffff`
 
+## Features In v1.1
+- changed layout and styling on the top panel
+- changed layout of tube labels and counters
+
 ## Features In v1.0
 
 - Always uses dark theme
