@@ -8,26 +8,50 @@ export class BallSortSolver {
   }
 
   isSolved(state: SolverStateType): boolean {
-    return state.every(
-      (tube, idx) =>
-        tube.length === 0 ||
-        (tube.length === this.capacities[idx] &&
-          tube.every((ball) => ball === tube[0])),
-    )
+    const seenColors = new Set<string>()
+
+    for (let i = 0; i < state.length; i++) {
+      const tube = state[i]
+      if (tube.length === 0) continue
+
+      const firstColor = tube[0]
+
+      // 1. All balls in this tube must be of the same color
+      const isUniform = tube.every((ball) => ball === firstColor)
+      if (!isUniform) return false
+
+      // 2. This color must not have appeared in any other tube (each color should be contained in only one tube)
+      if (seenColors.has(firstColor)) return false
+      seenColors.add(firstColor)
+    }
+
+    return true
   }
 
   serialize(state: SolverStateType): string {
-    return state
-      .map((tube) => tube.join(','))
-      .sort()
-      .join('|')
+    // Group tubes by their capacities to avoid mixing tubes of different capacities when sorting
+    const capacityGroups: Record<number, string[]> = {}
+
+    for (let i = 0; i < state.length; i++) {
+      const cap = this.capacities[i]
+      if (!capacityGroups[cap]) capacityGroups[cap] = []
+      capacityGroups[cap].push(state[i].join(','))
+    }
+
+    const serializedParts = []
+    const sortedCaps = Object.keys(capacityGroups)
+      .map(Number)
+      .sort((a, b) => a - b)
+
+    for (const cap of sortedCaps) {
+      capacityGroups[cap].sort() // Sort only tubes with the same capacity
+      serializedParts.push(`C${cap}:[${capacityGroups[cap].join('|')}]`)
+    }
+
+    return serializedParts.join('-')
   }
 
-  isValidMove(
-    state: SolverStateType,
-    fromIdx: number,
-    toIdx: number,
-  ): boolean {
+  isValidMove(state: SolverStateType, fromIdx: number, toIdx: number): boolean {
     if (fromIdx === toIdx) return false
 
     const fromTube = state[fromIdx]
@@ -37,15 +61,15 @@ export class BallSortSolver {
     if (toTube.length === this.capacities[toIdx]) return false // Full destination tube
 
     if (toTube.length === 0) {
-      // Don't move a full tube of the same color to an empty tube (wasting time)
-      if (
-        fromTube.length === this.capacities[fromIdx] &&
-        fromTube.every((b) => b === fromTube[0])
-      )
-        return false
-      // Don't move a uniform tube (that isn't full) to an empty tube, unless it's to create space
       const isUniform = fromTube.every((b) => b === fromTube[0])
-      if (isUniform) return false
+
+      if (isUniform) {
+        // Don't allow moving a tube that is uniform in color to an empty tube of the same capacity (as it would be a waste of time)
+        // But allow moving to a tube of different capacity to open up space in larger/smaller tubes
+        if (this.capacities[fromIdx] === this.capacities[toIdx]) {
+          return false
+        }
+      }
       return true
     }
 
@@ -60,7 +84,7 @@ export class BallSortSolver {
     const queue: Array<{ state: SolverStateType; moves: SolutionType }> = [
       { state: initialState, moves: [] },
     ]
-    const visited = new Set()
+    const visited = new Set<string>()
     visited.add(this.serialize(initialState))
 
     while (queue.length > 0) {
@@ -73,11 +97,28 @@ export class BallSortSolver {
       for (let i = 0; i < state.length; i++) {
         for (let j = 0; j < state.length; j++) {
           if (this.isValidMove(state, i, j)) {
-            // Simulate the move
+            // Simulate the move in chunks (move all consecutive balls of the same color that the destination can accommodate)
             const newState = state.map((tube) => [...tube])
-            const ball = newState[i].pop()
-            if (!ball) continue
-            newState[j].push(ball)
+            const fromTube = newState[i]
+            const toTube = newState[j]
+
+            const topColor = fromTube[fromTube.length - 1]
+
+            // Count how many balls of the same color are consecutive at the top
+            let chunkCount = 0
+            for (let k = fromTube.length - 1; k >= 0; k--) {
+              if (fromTube[k] === topColor) chunkCount++
+              else break
+            }
+
+            const availableSpace = this.capacities[j] - toTube.length
+            const ballsToMove = Math.min(chunkCount, availableSpace)
+
+            // Move the balls from the source tube to the destination tube
+            for (let k = 0; k < ballsToMove; k++) {
+              const ball = fromTube.pop()
+              if (ball) toTube.push(ball)
+            }
 
             const serialized = this.serialize(newState)
 
@@ -85,7 +126,8 @@ export class BallSortSolver {
               visited.add(serialized)
               queue.push({
                 state: newState,
-                moves: [...moves, { from: i, to: j, hex: ball }],
+                // Save this move as 1 Move for the user (because in the game, when you press move once, it moves the whole chunk)
+                moves: [...moves, { from: i, to: j, hex: topColor }],
               })
             }
           }
