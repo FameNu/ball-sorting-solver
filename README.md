@@ -57,6 +57,7 @@ The app loads 12 default system colors, but you can add any custom color using t
 ## Features In v1.1
 - changed layout and styling on the top panel
 - changed layout of tube labels and counters
+- fixed bug: when size of tubes are not equal, the solver will not allow moving a uniform tube to an empty tube of the same capacity (as it would be a waste of time)
 
 ## Features In v1.0
 
