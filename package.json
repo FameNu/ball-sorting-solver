@@ -9,7 +9,7 @@
     "build": "tsc -b && vite build",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "predeploy": "npm run build",
+    "predeploy": "bun run build",
     "deploy": "gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview"

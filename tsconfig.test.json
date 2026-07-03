@@ -7,5 +7,10 @@
     "ignoreDeprecations": "6.0",
     "types": ["jest", "node"]
   },
-  "include": ["test/**/*.test.ts", "test/**/*.test.tsx", "test/jest.setup.ts"]
+  "include": [
+    "test/**/*.test.ts",
+    "test/**/*.test.tsx",
+    "test/jest.setup.ts",
+    "src/**/*.d.ts"
+  ]
 }
