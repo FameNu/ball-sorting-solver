@@ -51,15 +51,15 @@ export const SYSTEM_COLORS: SystemColor[] = [
   },
   {
     id: 'c9',
-    name: 'Orange',
-    hex: '#F9992B',
-    insideColor: { name: 'Inner Orange', hex: '#C06D0F' },
-  },
-  {
-    id: 'c10',
     name: 'Pink',
     hex: '#FFA2A3',
     insideColor: { name: 'Inner Pink', hex: '#E66B6D' },
+  },
+  {
+    id: 'c10',
+    name: 'Orange',
+    hex: '#F9992B',
+    insideColor: { name: 'Inner Orange', hex: '#C06D0F' },
   },
   {
     id: 'c11',
