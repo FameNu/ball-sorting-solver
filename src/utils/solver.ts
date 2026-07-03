@@ -88,8 +88,7 @@ export class BallSortSolver {
     visited.add(this.serialize(initialState))
 
     while (queue.length > 0) {
-      const current = queue.shift()
-      if (!current) break
+      const current = queue.shift()!
       const { state, moves } = current
 
       if (this.isSolved(state)) return moves
@@ -116,8 +115,7 @@ export class BallSortSolver {
 
             // Move the balls from the source tube to the destination tube
             for (let k = 0; k < ballsToMove; k++) {
-              const ball = fromTube.pop()
-              if (ball) toTube.push(ball)
+              toTube.push(fromTube.pop()!)
             }
 
             const serialized = this.serialize(newState)

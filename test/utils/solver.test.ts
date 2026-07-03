@@ -105,6 +105,13 @@ describe('BallSortSolver', () => {
       const state = [[RED_HEX, RED_HEX, RED_HEX], []]
       expect(solver.isValidMove(state, 0, 1)).toBe(true)
     })
+
+    it('should return false when moving a uniform tube to an empty tube of the same capacity', () => {
+      const capacities = [4, 4]
+      const solver = new BallSortSolver(capacities)
+      const state = [[RED_HEX, RED_HEX, RED_HEX, RED_HEX], []]
+      expect(solver.isValidMove(state, 0, 1)).toBe(false)
+    })
   })
 
   describe('solve', () => {
