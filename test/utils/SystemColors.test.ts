@@ -10,12 +10,14 @@ describe('SystemColors', () => {
       id: 'c1',
       name: 'Red',
       hex: '#FE5658',
+      insideColor: { name: 'Inner Red', hex: '#D13F40' },
     })
 
     expect(SYSTEM_COLORS[11]).toMatchObject({
       id: 'c12',
       name: 'White',
       hex: '#E7F1F3',
+      insideColor: { name: 'Inner White', hex: '#C1D9E0' },
     })
   })
 })
