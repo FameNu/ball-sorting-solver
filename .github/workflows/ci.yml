@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  unit-test:
+    uses: ./.github/workflows/unit-test.yml
+    secrets: inherit
+
+  deploy:
+    needs: unit-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
