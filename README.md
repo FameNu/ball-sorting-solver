@@ -2,6 +2,10 @@
 
 Version 1.0 of a dark-theme ball sorting puzzle solver built with React, TypeScript, and Vite.
 
+## Try It
+
+[Open Ball Sorting Solver](https://famenu.github.io/ball-sorting-solver/) — Set up your tubes, then let the solver find a way to sort every color.
+
 ## Stack
 
 - React 19
